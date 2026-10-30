@@ -13,7 +13,7 @@ import { descriptors, places } from "./seedHelpers.js";
 
 // connect with mongoose to mongoDB to local Exodus
 // mongoose
-//   .connect("mongodb://admin:abc@10.0.0.79:27017/campgroundDB?authSource=admin")
+//   .connect(process.env.LOCAL_DB_URL)
 //   .then(() => {
 //     console.log(
 //       "MONGO DB CONNECTION OPEN TO campgroundDB For Seeding Purposes!!!!!",
@@ -26,10 +26,7 @@ import { descriptors, places } from "./seedHelpers.js";
 
 // connect with mongoose to cloud mongoDB at cloud.mongodb.com
 mongoose
-  .connect(
-    "mongodb+srv://eavincent:iL%2Av3Tyl3r%21@cluster0.p0s0g.mongodb.net/campgroundDB",
-    console.log("WE ARE CONNECTED DUDE!"),
-  )
+  .connect(process.env.MONGO_ATLAS_DB_URL)
   .then(() => {
     console.log(
       "MONGO DB CONNECTION OPEN TO campgroundDB For Seeding Purposes!!!!!",
