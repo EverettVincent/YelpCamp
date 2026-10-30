@@ -1,0 +1,20 @@
+# Normalize text files
+* text=auto
+
+# Force LF in source files
+*.js text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Windows scripts
+*.bat text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary

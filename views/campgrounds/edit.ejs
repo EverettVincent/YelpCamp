@@ -1,0 +1,46 @@
+<!-- edit.ejs -->
+<% layout("layouts/boilerplate.ejs") %>
+
+<h1>Edit A Campground</h1>
+
+<div class="row">
+  <h1 class="text-center">Edit Campground</h1>
+  <div class="col-6 offset-3">
+
+  <form action="/campgrounds/<%=  foundCamp[0]["_id"]  %>?_method=PATCH" method="POST" novalidate class="validated-form">
+
+    <div class="mb-2">
+      <label for="title" class="form-label">Campground Title</label>
+      <input type="text" id="title" name="formTitle" class="form-control" value="<%=  foundCamp[0]["title"] %>" required>
+    </div>
+    <div class="mb-2">
+      <label for="location" class="form-label">Location</label>
+      <input type="text" id="location" name="formLocation" class="form-control" value="<%=  foundCamp[0]["location"]   %>" required>
+    </div>
+    <div class="mb-2">
+      <label for="image" class="form-label">Image Url</label>
+      <input type="text" id="image" name="formImage" class="form-control" value="<%=  foundCamp[0]["image"]   %>" required>
+    </div>
+    <div class="mb-2">
+      <label for="price" class="form-label">Campground Price</label>
+      <div class="input-group">
+        <span class="input-group-text" id="price-label">$</span>
+        <input type="text" id="price" name="formPrice" class="form-control" aria-label="price"
+          aria-describedby="price-label"  value="<%= foundCamp[0]["price"] %>" required>
+      </div>
+    </div>
+    <div class="mb-2">
+      <label for="description" class="form-label">Description</label>
+      <textarea id="description" name="formDescription"  class="form-control" required><%= foundCamp[0]["description"] %>  
+      </textarea>
+    </div>
+
+    <div class="mt-3 mb-3">
+      <button class="btn btn-success">Save Campground</button>
+    </div>
+
+  </form>
+
+    <a href="/campgrounds/<%= foundCamp[0]["_id"] %>">Back To Campground</a>
+  </div>
+</div>
