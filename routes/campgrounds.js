@@ -55,6 +55,7 @@ router.post(
       description: formDescription,
     });
     await newCamp.save();
+    req.flash("success", "Successfully made a new campground!");
     res.redirect(`/campgrounds/${newCamp["_id"]}`);
 
     // res.redirect(`/campgrounds/${_id}`); // _id not created until save()

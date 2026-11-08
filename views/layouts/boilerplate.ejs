@@ -1,3 +1,4 @@
+<%# views/layouts/boilerplate.ejs %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,41 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BOILER PLATE!!!!!!!!!</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-  
 </head>
+
 <body class="d-flex flex-column vh-100">
   <%-  include("../partials/navbar.ejs")   %>
 
   <main class="container mt-5">
+    <%= success %>  <%# flash the success message from middleware %>
     <%- body  %>
   </main>
 
   <%- include("../partials/footer.ejs")  %>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (() => {
-      'use strict'
-
-      console.log("Hello from form validation script")
-
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.validated-form')
-
-      // Loop over them and prevent submission
-      Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-
-          form.classList.add('was-validated')
-        }, false)
-      })
-    }) ()
-  </script>
-
+  <%# serving static assets from the public dir %>
+   <script src="/javascripts/validateForms.js"></script>
+ 
 </body>
 </html>
