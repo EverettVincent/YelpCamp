@@ -12,7 +12,7 @@
   <%-  include("../partials/navbar.ejs")   %>
 
   <main class="container mt-5">
-    <%= success %>  <%# flash the success message from middleware %>
+    <%- include("../partials/flash.ejs") %> <%# flash the success message from middleware from the partial flash.ejs %>
     <%- body  %>
   </main>
 

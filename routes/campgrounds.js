@@ -83,6 +83,11 @@ router.get(
       "reviews",
     );
 
+    if (!foundCamp) {
+      req.flash("error", "Cannot find that campground?");
+      return res.redirect("/campgrounds");
+    }
+
     console.log(`We found the camp ${foundCamp}`);
     res.render("campgrounds/show.ejs", { foundCamp });
   }),
@@ -94,6 +99,13 @@ router.get(
   catchAsync(async (req, res) => {
     const { id: reqId } = req.params;
     const foundCamp = await Campground.find({ _id: reqId });
+
+    if (!foundCamp[0]) {
+      console.log("\n\n\n -------- COULD NOT FIND CAMP TO EDIT BECAUSE THE CAMP WAS DELETED ----------- \n\n\n");
+      req.flash("error", "Can not edit because this campground does not exist.");
+      return res.redirect("/campgrounds");
+    }
+
     res.render("campgrounds/edit.ejs", { foundCamp });
   }),
 );
@@ -118,6 +130,7 @@ router.patch(
 
     await foundCampToUpdate[0].save();
 
+    req.flash("success", "Successfully updated the campground.");
     res.redirect(`/campgrounds/${id}`);
   }),
 );
@@ -130,6 +143,8 @@ router.delete(
     // const foundCampToDelete = await Campground.findOne({ _id: id });
     // await foundCampToDelete.deleteOne();
     const deleteResult = await Campground.findByIdAndDelete({ _id: id });
+
+    req.flash("success", "Successfully deleted the campground!");
     res.redirect("/campgrounds");
   }),
 );
