@@ -5,6 +5,7 @@ import { catchAsync } from "../utils/catchAsync.js";
 import { ExpressError } from "../utils/ExpressError.js";
 import Campground from "../models/campground.js";
 import { campgroundSchema } from "../schemas.js"; // joi shema
+import { isLoggedIn } from "../middleware.js";
 
 const validateCampground = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body); // just use the error from result array
@@ -25,13 +26,14 @@ router.get("/", async (req, res) => {
 });
 
 // NEW    /campgrounds/new    GET
-router.get("/new", async (req, res) => {
+router.get("/new", isLoggedIn, async (req, res) => {
   res.render("campgrounds/new.ejs");
 });
 
 // CREATE     /campgrounds     POST
 router.post(
   "/",
+  isLoggedIn,
   validateCampground,
   catchAsync(async (req, res, next) => {
     // from actual form
@@ -62,6 +64,7 @@ router.post(
     // res.redirect("/campgrounds/6ab295fab0eb0ab21c73f6a5");
   }),
 );
+
 
 // ---------------------- Dynamic Routes ------------------------------------------
 
@@ -96,6 +99,7 @@ router.get(
 // EDIT     /campgrounds/:id/edit     GET     -- get edit.ejs form
 router.get(
   "/:id/edit",
+  isLoggedIn,
   catchAsync(async (req, res) => {
     const { id: reqId } = req.params;
     const foundCamp = await Campground.find({ _id: reqId });
@@ -113,6 +117,7 @@ router.get(
 // UPDATE      /campgrounds/:id       PATCH      -- called from save in edit.ejs form
 router.patch(
   "/:id",
+  isLoggedIn,
   validateCampground,
   catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -138,6 +143,7 @@ router.patch(
 // DESTROY       /campgrounds/:id       DELETE                  --  call this from a delete button that uses ?_method=DELETE
 router.delete(
   "/:id",
+  isLoggedIn,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     // const foundCampToDelete = await Campground.findOne({ _id: id });
@@ -148,5 +154,6 @@ router.delete(
     res.redirect("/campgrounds");
   }),
 );
+
 
 export { router as campgroundRoutes };

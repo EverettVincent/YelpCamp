@@ -1,0 +1,30 @@
+<%# views/users/register.ejs %>
+<% layout("layouts/boilerplate.ejs") %>
+
+<h1>Register</h1>
+<form action="/register" method="POST" class="validated-form" novalidate>
+  <div class="mb-3">
+    <label for="username">Username</label>
+    <input type="text" class="form-control" id="username" name="formUsername" required>
+    <div class="valid-feedback">
+      Looks good!
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="email">Email</label>
+    <input type="email" class="form-control" id="email" name="formEmail" required>
+    <div class="valid-feedback">
+      Looks good!
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" name="formPassword" required>
+    <div class="valid-feedback">
+      Looks good!
+    </div>
+  </div>
+  <button class="btn btn-success">Submit</button>
+</form>
+
+

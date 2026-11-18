@@ -1,3 +1,23 @@
-.env
+# Dependencies
 node_modules/
 
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# Coverage reports
+coverage/
+
+# Build output
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code workspace settings (optional)
+.vscode/settings.json

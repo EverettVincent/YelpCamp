@@ -13,6 +13,11 @@ import { catchAsync } from "./utils/catchAsync.js";
 import { ExpressError } from "./utils/ExpressError.js";
 import { campgroundRoutes } from "./routes/campgrounds.js";
 import { reviewRoutes } from "./routes/reviews.js";
+import { userRoutes } from "./routes/users.js";
+
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from "./models/user.js";
 
 // // from a named export
 // import { Campground } from "./models/campground.js"; // import the model from campground.js file
@@ -35,6 +40,7 @@ app.use(express.urlencoded({ extended: true })); // need this to make express pa
 app.use(express.json());
 app.use(express.static(path.join("public"))); // to use the static assets in the public dir
 
+
 const sessionConfig = {
   secret: "thisshouldbeabettersecret!",
   resave: false,
@@ -47,6 +53,22 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig));  // to use session cookies
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+// passport.use(new LocalStrategy(User.authenticate()));
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "formUsername",
+      passwordField: "formPassword"
+    },
+    User.authenticate()
+  )
+);
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // connect with mongoose to mongoDB
 // mongoose
@@ -72,16 +94,26 @@ mongoose
 
 // ---------------- Middleware -----------------------------------------------
 app.use((req, res, next) => {
-  console.log("\n\n Middleware success message call \n\n");
+    console.log("\n\n Middleware Locals \n\n");
+    console.log(req.session);
+  res.locals.currentUser = req.user;          // from passport
   res.locals.success = req.flash("success");  // every request, if flash message, will have access under the key "success"
   res.locals.error = req.flash("error");       // every request, if flash message, will have access under the key "error"
   next();
 });
 
+app.get("/fakeUser", async (req, res) => {
+  const newUser = new User({ email: "colttt@gmail.com", username: "colttt" });
+  const registeredUser = await User.register(newUser, "chicken");
+  res.send(registeredUser);
+});
+
 // ---------------- From Routes Files ----------------------------------------
+app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);  // added mergeParams paramater in routes/reviews.js
 // app.use("/campgrounds", reviewRoutes);
+
 
 app.get("/", (req, res) => {
   console.log("Home Route Hit - HELLO FROM YELP CAMP!");

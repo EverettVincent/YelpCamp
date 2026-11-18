@@ -1,0 +1,24 @@
+<%# views/users/login.ejs %>
+<% layout("layouts/boilerplate.ejs") %>
+
+<h1>Login</h1>
+<form action="/login" method="POST" class="validated-form" novalidate>
+  <div class="mb-3">
+    <label for="username">Username</label>
+    <input type="text" class="form-control" id="username" name="formUsername" required>
+    <div class="valid-feedback">
+      Looks good!
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" name="formPassword" required>
+    <div class="valid-feedback">
+      Looks good!
+    </div>
+  </div>
+  <button class="btn btn-success">Login</button>
+</form>
+
+
