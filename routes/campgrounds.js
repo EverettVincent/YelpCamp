@@ -55,6 +55,7 @@ router.post(
       image: formImage,
       price: formPrice,
       description: formDescription,
+      author: req.user._id,
     });
     await newCamp.save();
     req.flash("success", "Successfully made a new campground!");
@@ -84,7 +85,8 @@ router.get(
     // );
     const foundCamp = await Campground.findById({ _id: id }).populate(
       "reviews",
-    );
+    ).populate("author");
+    console.log(foundCamp);
 
     if (!foundCamp) {
       req.flash("error", "Cannot find that campground?");

@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import Campground from "../models/campground.js";
 import somecities from "./cities.js";
 import { descriptors, places } from "./seedHelpers.js";
+import "dotenv/config";
 
 // connect with mongoose to mongoDB to local Exodus
 // mongoose
@@ -56,6 +57,7 @@ const seedDB = async () => {
     const random1000 = Math.floor(Math.random() * 1000);
     const randomPrice = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
+      author: "6afb2c351acd4066edf71b88",
       location: `${somecities[random1000].city}, ${somecities[random1000].state}`,
       title: `${sample(descriptors)},  ${sample(places)}`,
       image: `https://picsum.photos/400?random=${Math.random()}`,

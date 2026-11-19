@@ -1,6 +1,7 @@
 // models/campground.js;
 import mongoose from "mongoose";
 import Review from "./review.js";
+import User from "./user.js";
 const Schema = mongoose.Schema;
 
 const campgroundSchema = new Schema(
@@ -10,6 +11,10 @@ const campgroundSchema = new Schema(
     price: Number,
     description: String,
     location: String,
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
     reviews: [
       {
         type: Schema.Types.ObjectId,
