@@ -1,5 +1,7 @@
 // routes/reviews.js
 import express from "express";
+import { validateReview } from "../middleware.js";
+
 const router = express.Router({ mergeParams: true });
 
 //from a default export
@@ -11,18 +13,6 @@ import { reviewSchema } from "../schemas.js"; // joi shema
 import { ExpressError } from "../utils/ExpressError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 
-const validateReview = (req, res, next) => {
-  console.log("validateReview called.......");
-  const { error } = reviewSchema.validate(req.body);
-
-  if (error) {
-    console.log(`ERROR IS ------>   ${error}`);
-    const msg = error.details.map((element) => element.message).join(","); // return an array joined to a new string on a comma
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
 
 // import { catchAsync } from "../utils/catchAsync.js";
 // import { ExpressError } from "../utils/ExpressError.js";

@@ -4,20 +4,10 @@ const router = express.Router();
 import { catchAsync } from "../utils/catchAsync.js";
 import { ExpressError } from "../utils/ExpressError.js";
 import Campground from "../models/campground.js";
-import { campgroundSchema } from "../schemas.js"; // joi shema
-import { isLoggedIn } from "../middleware.js";
+// import { campgroundSchema } from "../schemas.js"; // joi shema
+import { isLoggedIn, validateCampground, isAuthor } from "../middleware.js";
 
-const validateCampground = (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body); // just use the error from result array
 
-  if (error) {
-    console.log(`ERROR IS ------>   ${error}`);
-    const msg = error.details.map((element) => element.message).join(","); // return an array joined to a new string on a comma
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
 
 // INDEX     /campgrounds    GET
 router.get("/", async (req, res) => {
@@ -102,6 +92,7 @@ router.get(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req, res) => {
     const { id: reqId } = req.params;
     const foundCamp = await Campground.find({ _id: reqId });
@@ -120,13 +111,14 @@ router.get(
 router.patch(
   "/:id",
   isLoggedIn,
+  isAuthor,
   validateCampground,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const foundCampToUpdate = await Campground.find({ _id: id });
     const { formTitle, formLocation, formImage, formPrice, formDescription } =
       req.body;
-
+    
     foundCampToUpdate[0].title = formTitle;
     foundCampToUpdate[0].location = formLocation;
     foundCampToUpdate[0].image = formImage;
@@ -136,7 +128,6 @@ router.patch(
     console.log("Finished Update Route in app.patch.", foundCampToUpdate[0]);
 
     await foundCampToUpdate[0].save();
-
     req.flash("success", "Successfully updated the campground.");
     res.redirect(`/campgrounds/${id}`);
   }),
@@ -146,12 +137,13 @@ router.patch(
 router.delete(
   "/:id",
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    // const foundCampToDelete = await Campground.findOne({ _id: id });
-    // await foundCampToDelete.deleteOne();
-    const deleteResult = await Campground.findByIdAndDelete({ _id: id });
-
+    // const deleteResult = await Campground.findByIdAndDelete({ _id: id });
+    const foundCampToDelete = await Campground.findOne({ _id: id });
+    
+    await foundCampToDelete.deleteOne();
     req.flash("success", "Successfully deleted the campground!");
     res.redirect("/campgrounds");
   }),
