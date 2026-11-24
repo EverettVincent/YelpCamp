@@ -6,6 +6,10 @@ const reviewSchema = new Schema(
   {
     rating: Number,
     body: String,
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    }
   },
   { versionKey: "_revision" }, // Stores as _revision: 0
 );

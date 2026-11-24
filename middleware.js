@@ -2,6 +2,7 @@
 import { campgroundSchema, reviewSchema } from "./schemas.js"; // joi shema
 import { ExpressError } from "./utils/ExpressError.js";
 import Campground from "./models/campground.js";
+import Review from "./models/review.js";
 
 
 const isLoggedIn = (req, res, next) => {
@@ -39,6 +40,16 @@ const isAuthor = async(req, res, next) => {
   next();
 }
 
+const isReviewAuthor = async(req, res, next) => {
+  const { id, reviewId } = req.params;
+  const review = await Review.findById(reviewId);
+  if (!review.author.equals(req.user._id))  {
+      req.flash("error", "You do not have permission to do that");
+      return res.redirect(`/campgrounds/${id}`);
+  }
+  next();
+}
+
 const storeReturnTo = (req, res, next) => {
     if (req.session.returnTo) {
         res.locals.returnTo = req.session.returnTo;
@@ -61,4 +72,4 @@ const validateReview = (req, res, next) => {
 };
 
 
-export { isLoggedIn, validateCampground, isAuthor, storeReturnTo, validateReview }
+export { isLoggedIn, validateCampground, isAuthor, storeReturnTo, validateReview, isReviewAuthor }

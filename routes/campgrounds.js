@@ -73,11 +73,19 @@ router.get(
     // const foundCamp = await Campground.findById({ _id: prodId }).populate(
     //   "reviews",
     // );
-    const foundCamp = await Campground.findById({ _id: id }).populate(
-      "reviews",
-    ).populate("author");
-    console.log(foundCamp);
 
+    // const foundCamp = await Campground.findById({ _id: id }).populate(
+    //   "reviews",
+    // ).populate("author");
+    
+    const foundCamp = await Campground.findById({ _id: id }).populate({
+      path: "reviews",
+      populate: {
+        path: "author"
+      }
+    }).populate("author");
+    console.log(foundCamp);
+    
     if (!foundCamp) {
       req.flash("error", "Cannot find that campground?");
       return res.redirect("/campgrounds");

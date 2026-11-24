@@ -1,6 +1,6 @@
 // routes/reviews.js
 import express from "express";
-import { validateReview } from "../middleware.js";
+import { validateReview, isLoggedIn, isReviewAuthor } from "../middleware.js";
 
 const router = express.Router({ mergeParams: true });
 
@@ -23,6 +23,7 @@ import { catchAsync } from "../utils/catchAsync.js";
 // "/campgrounds/:id/reviews",
 router.post(
   "/",
+  isLoggedIn,
   validateReview,
   catchAsync(async (req, res) => {
 
@@ -42,6 +43,7 @@ router.post(
     const newReview = new Review({
       body: formBody,
       rating: formRating,
+      author: req.user._id
     });
 
     console.log("the new review object is: ", JSON.stringify(newReview, null, 3));
@@ -58,6 +60,8 @@ router.post(
 // delete a review on a particular campground page, and delete the reviewId from yelpcamps collection too
 router.delete(
   "/:reviewId",
+  isLoggedIn,
+  isReviewAuthor,
   catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); // pull the reviewId from the campground reviews array
